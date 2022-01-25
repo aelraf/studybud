@@ -9,10 +9,10 @@
 <h1>Home template</h1>
 <div>
     <div>
-        {% for room in roms %}
+        {% for room in rooms %}
             <div>
 
-                <h5>{{ room.id }} -- <a href="/room/{{room.id}}">{{ room.name }}</a></h5>
+                <h5>{{ room.id }} -- <a href="{% url 'room' room.id %}">{{ room.name }}</a></h5>
             </div>
         {% endfor %}
     </div>
