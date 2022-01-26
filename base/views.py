@@ -75,3 +75,8 @@ def delete_room(request, pk):
 
     return render(request, 'base/delete.html', {'obj': room})
 
+
+def login_page(request):
+    context = {}
+    return render(request, 'base/login_register.html', context=context)
+
