@@ -3,6 +3,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Room
+from .forms import RoomForm
 
 
 # rooms = [
@@ -24,4 +25,14 @@ def room(request, pk):
     context = {'room': room}
 
     return render(request, 'base/room.html', context=context)
+
+
+def create_room(request):
+    form = RoomForm()
+
+    if request.method == 'POST':
+        print(request.POST)
+
+    context = {'form': form}
+    return render(request, 'base/room_form.html', context=context)
 
