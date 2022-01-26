@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -90,6 +91,10 @@ def delete_room(request, pk):
 
 
 def login_page(request):
+    page = 'login'
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -108,10 +113,18 @@ def login_page(request):
         else:
             messages.error(request, 'Username or password does not exists')
 
-    context = {}
+    context = {'page': page}
     return render(request, 'base/login_register.html', context=context)
 
 
 def logout_user(request):
     logout(request)
     return redirect('home')
+
+
+def register_user(request):
+    page = 'register'
+
+    form = UserCreationForm()
+
+    return render(request, 'base/login_register.html', {'form': form})
