@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.db.models import Q
@@ -41,6 +42,7 @@ def room(request, pk):
     return render(request, 'base/room.html', context=context)
 
 
+@login_required(login_url='login')
 def create_room(request):
     form = RoomForm()
 
@@ -55,9 +57,13 @@ def create_room(request):
     return render(request, 'base/room_form.html', context=context)
 
 
+@login_required(login_url='login')
 def update_room(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
+
+    if request.user != room.host:
+        return HttpResponse("Your are not allowed here!!!")
 
     if request.method == 'POST':
         form = RoomForm(request.POST, instance=room)
@@ -69,8 +75,13 @@ def update_room(request, pk):
     return render(request, 'base/room_form.html', context=context)
 
 
+@login_required(login_url='login')
 def delete_room(request, pk):
     room = Room.objects.get(id=pk)
+
+    if request.user != room.host:
+        return HttpResponse("Your are not allowed here!!!")
+
     if request.method == 'POST':
         room.delete()
         return redirect('home')
@@ -92,6 +103,7 @@ def login_page(request):
 
         if user is not None:
             login(request, user)
+            messages.success(request, "Zalogowano pomyślnie")
             return redirect('home')
         else:
             messages.error(request, 'Username or password does not exists')
