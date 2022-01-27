@@ -101,6 +101,20 @@ def delete_room(request, pk):
     return render(request, 'base/delete.html', {'obj': room})
 
 
+@login_required(login_url='login')
+def delete_message(request, pk):
+    message = Message.objects.get(id=pk)
+
+    if request.user != message.user:
+        return HttpResponse("Your are not allowed here!!!")
+
+    if request.method == 'POST':
+        message.delete()
+        return redirect('home')
+
+    return render(request, 'base/delete.html', {'obj': message})
+
+
 def login_page(request):
     page = 'login'
     if request.user.is_authenticated:
