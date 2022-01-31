@@ -138,6 +138,11 @@ def delete_message(request, pk):
     return render(request, 'base/delete.html', {'obj': message})
 
 
+def logout_user(request):
+    logout(request)
+    return redirect('home')
+
+
 def login_page(request):
     page = 'login'
     if request.user.is_authenticated:
@@ -165,11 +170,6 @@ def login_page(request):
     return render(request, 'base/login_register.html', context=context)
 
 
-def logout_user(request):
-    logout(request)
-    return redirect('home')
-
-
 def register_user(request):
     page = 'register'
     form = UserCreationForm()
@@ -186,11 +186,13 @@ def register_user(request):
         else:
             messages.error(request, "An error occured during registration.")
 
-    return render(request, 'base/login_register.html', {'form': form})
+    context = {'form': form, 'page': page}
+    return render(request, 'base/login_register.html', context=context)
 
 
 @login_required(login_url='login')
 def update_user(request):
+    page = 'update'
     user = request.user
     form = UserForm(instance=user)
 
@@ -202,6 +204,6 @@ def update_user(request):
         else:
             messages.error(request, "An error occured during updating user.")
 
-    context = {'form': form}
+    context = {'form': form, 'page': page}
     return render(request, 'base/update_user.html', context=context)
 
