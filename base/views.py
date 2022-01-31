@@ -187,3 +187,10 @@ def register_user(request):
             messages.error(request, "An error occured during registration.")
 
     return render(request, 'base/login_register.html', {'form': form})
+
+
+@login_required(login_url='login')
+def update_user(request):
+    context = {}
+    return render(request, 'base/update_user.html', context=context)
+
