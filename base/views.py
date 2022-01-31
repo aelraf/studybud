@@ -199,6 +199,8 @@ def update_user(request):
         if form.is_valid():
             form.save()
             return redirect('user_profile', pk=user.id)
+        else:
+            messages.error(request, "An error occured during updating user.")
 
     context = {'form': form}
     return render(request, 'base/update_user.html', context=context)
