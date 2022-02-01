@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 
 
 class Topic(models.Model):
@@ -38,5 +38,9 @@ class Message(models.Model):
 
     def __str__(self):
         return self.body[0:50]
+
+
+class User(AbstractUser):
+    
 
 
