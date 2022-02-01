@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cool Rooms</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" >
 </head>
 <body>
+    <h1>Cool Rooms</h1>
 
+    <div id="rooms-container">
+
+    </div>
 </body>
+
+<script>
+    let getRooms = async () => {
+        let response = await fetch('http://127.0.0.1:8000/api/rooms)
+        console.log('RESPONSE: ', response)
+    }
+
+    getRooms()
+</script>
+
 </html>
