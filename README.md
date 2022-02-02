@@ -9,4 +9,12 @@ Na podstawie filmu "Python Django 7 hour course".
 
 Projekt nie posiada testów jednostkowych.
 
+Klonowanie i uruchomienie repozytorium:
+> git clone https://github.com/aelraf/studybud.git
+> cd studybud
+> pip install virtualenv
+> virtualenv venv
+> source venv\Script\activate
+> pip install -r requirements.txt
 
+> python manage.py runserver
