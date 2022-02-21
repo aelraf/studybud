@@ -10,6 +10,7 @@ Na podstawie filmu "Python Django 7 hour course".
 Projekt w wersji pierwotnej nie posiada testów jednostkowych.
 
 Klonowanie i uruchomienie repozytorium:
+
 `$ git clone https://github.com/aelraf/studybud.git`
 
 `$ cd studybud`
@@ -25,7 +26,7 @@ Klonowanie i uruchomienie repozytorium:
 `$ python manage.py runserver`
 
 # Uwaga:
-Kod powstał (poza testami) na podstawie filmu instruktażowego z yt "Python Django 7 hour course".
+Kod powstał (poza testami, które są w pełni mojego autorstwa) na podstawie filmu instruktażowego z yt "Python Django 7 hour course".
 
 # ToDo
 - testy jednostkowe
