@@ -43,6 +43,15 @@ def room(request, pk):
     participants = room.participants.all()
 
     if request.method == "POST":
+        print("room: request.scheme {}".format(request.scheme))
+        print("request.body: {}".format(request.body))
+        print("request.path: {}".format(request.path))
+        print("request.path_info: {}".format(request.path_info))
+        print("request.content_type: {}".format(request.content_type))
+        print("request.user: {}".format(request.user))
+        print("request.content_params: {}".format(request.content_params))
+        print("request.resolver_match: {}".format(request.resolver_match))
+
         message = Message.objects.create(
             user=request.user,
             room=room,
