@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from django.db.models import QuerySet
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -7,11 +7,11 @@ from rest_framework import status
 from base.models import Room, User, Topic, Message
 
 
-def create_user_alex():
+def create_user(name='Alex', email='alex@alex.com', bio='Jestem Alex'):
     return User.objects.create(
-        name='Alex',
-        email='alex@alex.com',
-        bio='Jestem Alex',
+        name=name,
+        email=email,
+        bio=bio,
     )
 
 
@@ -21,14 +21,19 @@ def create_topics(name='Django'):
     )
 
 
-def create_room(name: str, topic: str, name_room: str = 'Pogadanki o Django') -> Room:
+def create_room(
+        name: str,
+        topic: str,
+        name_room: str = 'Pogadanki o Django',
+        desc: str = "Jesteśmy tutaj, aby pogadać o Django"
+) -> Room:
     host = User.objects.get(name=name)
     topic = Topic.objects.get(name=topic)
     return Room.objects.create(
         host=host,
         topic=topic,
         name=name_room,
-        description="Jesteśmy tutaj, aby pogadać o Django",
+        description=desc,
     )
 
 
@@ -44,19 +49,51 @@ def create_message(user: str, room: str, message: str = 'Witaj') -> Message:
 
 class TestHome(TestCase):
     def setUp(self):
-        create_user_alex()
+        create_user(name='Alex', email='alex@alex.com', bio='Jestem Alex')
+        # create_user(name='John', email='john@john.com', bio="Starzec")
         create_topics(name="Django")
+        create_topics(name="Java")
+        create_topics(name="C++")
         create_room(name='Alex', topic="Django")
+        create_room(name='Alex', topic="Java", name_room="pogadanki o Javie", desc='tylko Java')
         create_message(user='Alex', room="Pogadanki o Django")
 
     def test_home_get(self):
         response = self.client.get(reverse('home'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        # self.assertEqual(response.)
+        rooms = Room.objects.all()
+        rooms_count = rooms.count()
 
-    def test_home_q_is_not_empty(self):
+        self.assertIsInstance(response.context['rooms'], QuerySet)
+        self.assertNotEqual(response.context['rooms'], [])
+        self.assertEqual(response.context['rooms'].count(), rooms_count)
+        self.assertQuerysetEqual(response.context['rooms'], rooms)
+
+        self.assertNotEqual(response.context['topics'], [])
+        self.assertEqual(response.context['topics'].count(), 3)
+
+        self.assertNotEqual(response.context["room_count"], [])
+        self.assertEqual(response.context["room_count"], rooms_count)
+
+        self.assertNotEqual(response.context['room_messages'], [])
+        self.assertEqual(response.context["room_messages"].count(), 1)
+
+    def test_home_q_is_django(self):
         response = self.client.get(reverse('home'), {'q': 'django'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        response_count = response.context['rooms'].count()
+        self.assertEqual(response_count, 1)
+
+        self.assertEqual(response.context['room_count'], 1)
+
+        self.assertEqual(response.context['topics'].count(), 3)
+
+    def test_home_q_is_not_valid(self):
+        response = self.client.get(reverse('home'), {'q': '*234ksQO__5$'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response_count = response.context['rooms'].count()
+        self.assertEqual(response_count, 0)
 
