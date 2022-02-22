@@ -170,6 +170,64 @@ class TestUserProfileView(TestCase):
         # self.assertQuerysetEqual(response.context["topics"], topics)
 
 
-class TestCreateRoom(TestCase):
+class TestsCreateRoomView(TestCase):
+    def setUp(self) -> None:
+        create_user(name='Alex', email='alex@alex.com', bio='Jestem Alex')
+        create_topics(name="Django")
+        create_topics(name="Java")
+        create_topics(name="C++")
+        create_room(name='Alex', topic="Django")
+        create_room(name='Alex', topic="Java", name_room="pogadanki o Javie", desc='tylko Java')
+        create_message(user='Alex', room="Pogadanki o Django")
+
     def test_001(self):
         pass
+
+
+class TestsUpdateRoomView(TestCase):
+    def setUp(self) -> None:
+        create_user(name='Alex', email='alex@alex.com', bio='Jestem Alex')
+        create_topics(name="Django")
+        create_topics(name="Java")
+        create_topics(name="C++")
+        create_room(name='Alex', topic="Django")
+        create_room(name='Alex', topic="Java", name_room="pogadanki o Javie", desc='tylko Java')
+        create_message(user='Alex', room="Pogadanki o Django")
+
+
+class TestsViewDeleteRoom(TestCase):
+    def setUp(self) -> None:
+        create_user(name='Alex', email='alex@alex.com', bio='Jestem Alex')
+        create_topics(name="Django")
+        create_topics(name="Java")
+        create_topics(name="C++")
+        create_room(name='Alex', topic="Django")
+        create_room(name='Alex', topic="Java", name_room="pogadanki o Javie", desc='tylko Java')
+        create_message(user='Alex', room="Pogadanki o Django")
+
+
+class TestsViewDeleteMessage(TestCase):
+    def setUp(self) -> None:
+        create_user(name='Alex', email='alex@alex.com', bio='Jestem Alex')
+        create_topics(name="Django")
+        create_topics(name="Java")
+        create_topics(name="C++")
+        create_room(name='Alex', topic="Django")
+        create_room(name='Alex', topic="Java", name_room="pogadanki o Javie", desc='tylko Java')
+        create_message(user='Alex', room="Pogadanki o Django")
+
+
+class TestsViewLoginPage(TestCase):
+    def setUp(self) -> None:
+        create_user(name='Alex', email='alex@alex.com', bio='Jestem Alex')
+        create_topics(name="Django")
+        create_topics(name="Java")
+        create_topics(name="C++")
+        create_room(name='Alex', topic="Django")
+        create_room(name='Alex', topic="Java", name_room="pogadanki o Javie", desc='tylko Java')
+        create_message(user='Alex', room="Pogadanki o Django")
+
+
+class TestsViewRegisterUser(TestCase):
+    def setUp(self) -> None:
+        pass 
