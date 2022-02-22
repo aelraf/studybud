@@ -116,6 +116,8 @@ class TestRoomView(TestCase):
         create_message(user='Alex', room="Pogadanki o Django")
         create_message(user='Alex', room="Pogadanki o Django", message="to zaczynamy?")
 
+        login = self.client.login(username='Alex', password='1234')
+
     def test_room_get(self):
         pk = 1
         response = self.client.get(reverse('room', kwargs={'pk': pk}))
@@ -148,3 +150,26 @@ class TestUserProfileView(TestCase):
         create_room(name='Alex', topic="Java", name_room="pogadanki o Javie", desc='tylko Java')
         create_message(user='Alex', room="Pogadanki o Django")
 
+    def test_user_profile_get(self):
+        pk = 1
+        response = self.client.get(reverse('user_profile', kwargs={'pk': pk}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        user = User.objects.get(name='Alex')
+        self.assertEqual(response.context['user'], user)
+
+        rooms = Room.objects.filter(host=user.id)
+        self.assertQuerysetEqual(response.context['rooms'], rooms)
+
+        messages = Message.objects.filter(user=user.id)
+        self.assertQuerysetEqual(response.context["room_messages"], messages)
+
+        # topics = Topic.objects.all()
+        # print("topics: ".format(topics))
+        # print("response.topics: {}".format(response.context["topics"]))
+        # self.assertQuerysetEqual(response.context["topics"], topics)
+
+
+class TestCreateRoom(TestCase):
+    def test_001(self):
+        pass
