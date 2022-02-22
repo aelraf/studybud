@@ -230,4 +230,19 @@ class TestsViewLoginPage(TestCase):
 
 class TestsViewRegisterUser(TestCase):
     def setUp(self) -> None:
+        pass
+
+
+class TestsViewUpdateUser(TestCase):
+    def setUp(self) -> None:
+        pass
+
+
+class TestsViewTopicsPage(TestCase):
+    def setUp(self) -> None:
+        pass
+
+
+class TestsViewActivitiesPage(TestCase):
+    def setUp(self) -> None:
         pass 
