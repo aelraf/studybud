@@ -245,4 +245,17 @@ class TestsViewTopicsPage(TestCase):
 
 class TestsViewActivitiesPage(TestCase):
     def setUp(self) -> None:
-        pass 
+        pass
+
+
+class TestsUserModel(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        User.objects.create(name="Olaf", email="olaf@olaf.com", password="12345")
+
+    def test_name_label(self):
+        user = User.objects.get(id=1)
+        field_label = user._meta.get_field('name').verbose_name
+        self.assertEqual(field_label, 'name')
+
+
