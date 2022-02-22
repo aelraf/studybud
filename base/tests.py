@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db.models import QuerySet
 from django.test import TestCase
-from django.urls import reverse
+from django.urls import reverse, NoReverseMatch
 from rest_framework import status
 
 from base.models import Room, User, Topic, Message
@@ -123,13 +123,28 @@ class TestRoomView(TestCase):
 
         self.assertEqual(response.context['room_messages'].count(), 2)
 
-    def test_room_post_message(self):
-        pk = 1
-        user = User.objects.get(name='Alex')
-        self.assertIsInstance(user, User)
-        self.user = user
-        login = self.client.login(username='Alex', password='1234')
-        print("user: {}, {}, {}, {},".format(user, user.email, user.pk, user.password))
-        response = self.client.post(reverse('room', kwargs={'pk': pk}), {'body': 'Witam witam'})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_room_get_without_pk(self):
+        with self.assertRaises(NoReverseMatch):
+            response = self.client.get(reverse('room'))
+
+    # def test_room_post_message(self):
+    #     pk = 1
+    #     user = User.objects.get(name='Alex')
+    #     self.assertIsInstance(user, User)
+    #     self.user = user
+    #     login = self.client.login(username='Alex', password='1234')
+    #     print("user: {}, {}, {}, {},".format(user, user.email, user.pk, user.password))
+    #     response = self.client.post(reverse('room', kwargs={'pk': pk}), {'body': 'Witam witam'})
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class TestUserProfileView(TestCase):
+    def setUp(self) -> None:
+        create_user(name='Alex', email='alex@alex.com', bio='Jestem Alex')
+        create_topics(name="Django")
+        create_topics(name="Java")
+        create_topics(name="C++")
+        create_room(name='Alex', topic="Django")
+        create_room(name='Alex', topic="Java", name_room="pogadanki o Javie", desc='tylko Java')
+        create_message(user='Alex', room="Pogadanki o Django")
 
